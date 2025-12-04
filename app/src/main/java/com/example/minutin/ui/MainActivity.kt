@@ -3,7 +3,7 @@ package com.example.minutin.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.minutin.ui.navigation.AppEntry
+import com.example.minutin.ui.AppEntry
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

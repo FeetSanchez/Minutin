@@ -1,1 +1,16 @@
-/build
+# Android Studio / IntelliJ
+/.idea/
+/.gradle/
+/local.properties
+/*.iml
+
+# Build
+/build/
+
+# Generated
+/.cxx/
+/.externalNativeBuild/
+
+# Misc
+.DS_Store
+

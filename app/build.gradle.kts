@@ -1,9 +1,13 @@
+import org.gradle.api.JavaVersion
+
 plugins {
+    // Use version catalog aliases for core plugins (if libs.versions.toml exists)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    // Added plugins required for the architecture
+
+    // Kapt and Hilt plugin (explicit IDs are safe if pluginManagement is configured)
     id("org.jetbrains.kotlin.kapt")
-    id("com.google.dagger.hilt.android")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -12,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.minutin"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -37,13 +41,19 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {

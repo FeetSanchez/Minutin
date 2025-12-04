@@ -18,7 +18,10 @@ class FlashcardsViewModel @Inject constructor(private val repo: FlashcardReposit
 
     fun loadFlashcards() {
         viewModelScope.launch {
-            _flashcards.value = repo.getAll()
+            // Collect the Flow returned by the repository and update StateFlow
+            repo.getAll().collect { list ->
+                _flashcards.value = list
+            }
         }
     }
 
@@ -29,4 +32,3 @@ class FlashcardsViewModel @Inject constructor(private val repo: FlashcardReposit
         }
     }
 }
-

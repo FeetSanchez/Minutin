@@ -1,27 +1,46 @@
 package com.example.minutin.core.speech
-}
-    fun shutdown() { tts.shutdown() }
 
-    }
-        return SpeechRecognizer.createSpeechRecognizer(context)
-    fun createSpeechRecognizer(): SpeechRecognizer {
+import android.content.Context
+import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
+import java.util.Locale
 
-    fun stopSpeaking() { tts.stop() }
-
-    }
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "minutin_tts")
-    fun speak(text: String) {
-
-    }
-        }
-            tts.language = Locale.getDefault()
-        if (status == TextToSpeech.SUCCESS) {
-    private val tts: TextToSpeech = TextToSpeech(context) { status ->
 class SpeechManager(private val context: Context) {
 
-import java.util.Locale
-import android.speech.tts.TextToSpeech
-import android.speech.SpeechRecognizer
-import android.content.Context
+    // Initialize TextToSpeech lazily to avoid initialization-time issues
+    private var tts: TextToSpeech? = null
 
+    private fun ensureTtsInitialized() {
+        if (tts == null) {
+            tts = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    tts?.language = Locale.getDefault()
+                }
+            }
+        }
+    }
 
+    /**
+     * Text-to-Speech
+     */
+    fun speak(text: String) {
+        ensureTtsInitialized()
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "minutin_tts")
+    }
+
+    fun stopSpeaking() {
+        tts?.stop()
+    }
+
+    fun shutdown() {
+        tts?.shutdown()
+        tts = null
+    }
+
+    /**
+     * Speech-to-Text
+     */
+    fun createSpeechRecognizer(): SpeechRecognizer {
+        return SpeechRecognizer.createSpeechRecognizer(context)
+    }
+}

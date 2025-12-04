@@ -2,7 +2,7 @@ package com.example.minutin.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.minutin.data.remote.llm.LLMApiService
+import com.example.minutin.llm.LLMApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,9 +18,8 @@ class ChatbotViewModel @Inject constructor(private val llm: LLMApiService) : Vie
     fun sendUserMessage(msg: String) {
         _messages.value = _messages.value + "You: $msg"
         viewModelScope.launch {
-            val reply = llm.generateText(msg)
+            val reply = llm.generate(msg)
             _messages.value = _messages.value + "Bot: $reply"
         }
     }
 }
-

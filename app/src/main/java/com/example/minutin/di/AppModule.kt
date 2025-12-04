@@ -3,8 +3,7 @@ package com.example.minutin.di
 import android.content.Context
 import androidx.room.Room
 import com.example.minutin.data.local.db.MinutinDatabase
-import com.example.minutin.data.remote.llm.LLMApiService
-import com.example.minutin.data.remote.llm.LLMApiServiceImpl
+import com.example.minutin.data.local.dao.FlashcardDao
 import com.example.minutin.core.prefs.UserPrefsManager
 import com.example.minutin.core.speech.SpeechManager
 import com.example.minutin.core.ml.OCRManager
@@ -47,11 +46,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLLMService(): LLMApiService = LLMApiServiceImpl()
+    fun provideLLMService(): com.example.minutin.llm.LLMApiService = com.example.minutin.llm.LLMApiServiceImpl()
 
     @Provides
     @Singleton
-    fun provideFlashcardGenerator(ocr: OCRManager, llm: LLMApiService) = FlashcardGenerator(ocr, llm)
+    fun provideFlashcardGenerator(ocr: OCRManager, llm: com.example.minutin.llm.LLMApiService) = FlashcardGenerator(ocr, llm)
 
     @Provides
     @Singleton
@@ -64,4 +63,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFlashcardRepository(db: MinutinDatabase): FlashcardRepository = FlashcardRepositoryImpl(db)
+
+    // Provide FlashcardDao directly for convenience (used by some components)
+    @Provides
+    @Singleton
+    fun provideFlashcardDao(db: MinutinDatabase): FlashcardDao = db.flashcardDao()
 }
